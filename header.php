@@ -51,7 +51,7 @@
                             <button type="submit" class="btn btn-danger">Cerrar sesión</button>
                         </form>
                     <?php else: ?>
-                        <form method="post" action="validar_login.php" class="d-flex">
+                        <form method="post" action="" class="d-flex">
                             <input type="text" name="usuario" class="form-control me-2" placeholder="Usuario" required>
                             <input type="password" name="contrasenia" class="form-control me-2" placeholder="Contraseña" required>
                             <button type="submit" class="btn btn-danger">Iniciar sesión</button>
