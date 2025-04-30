@@ -1,6 +1,5 @@
 <?php
     include 'tabla.php';
-    //include 'agregarPokemon.php';
 
     $config = parse_ini_file("DB/config.ini", true); //Lee la config
 
