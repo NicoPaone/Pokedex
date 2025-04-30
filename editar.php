@@ -1,6 +1,11 @@
 <?php
     session_start();
 
+    if (!isset($_SESSION['usuario'])) {
+        header('Location: index.php');
+        exit();
+    }
+
     include 'tabla.php';
 
     $config = parse_ini_file("DB/config.ini", true); //Lee la config
@@ -40,6 +45,28 @@
                     $destino = 'imagenes/pokemon/' . $nombreImagen;
 
                     if (move_uploaded_file($imagen['tmp_name'], $destino)) {
+
+                        /*$imagenVieja = "SELECT imagen FROM pokemon WHERE numero_identificador = ?";
+                        unlink("imagenes/pokemon/" . $imagenVieja);*/
+
+                        $sqlImagenVieja = "SELECT imagen FROM pokemon WHERE numero_identificador = ?";
+                        $stmtImagenVieja = $conexion->prepare($sqlImagenVieja);
+                        $stmtImagenVieja->bind_param("i", $numero_identificador);
+                        $stmtImagenVieja->execute();
+                        $resultadoViejo = $stmtImagenVieja->get_result();
+
+                        if ($resultadoViejo->num_rows > 0) {
+                            $pokemonViejo = $resultadoViejo->fetch_assoc();
+                            $nombreImagenVieja = $pokemonViejo['imagen'];
+
+                            $rutaImagenVieja = "imagenes/pokemon/" . $nombreImagenVieja;
+                            if (file_exists($rutaImagenVieja)) {
+                                unlink($rutaImagenVieja);
+                            }
+                        }
+                        $stmtImagenVieja->close();
+
+
                         $sqlImagen = "UPDATE pokemon SET imagen = ? WHERE numero_identificador = ?";
                         $stmtImagen = $conexion->prepare($sqlImagen);
                         $stmtImagen->bind_param("si", $rutaImagen, $numero);
@@ -64,7 +91,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Title</title>
+        <title>Pokedex</title>
+        <link rel="icon" type="image/png" href="imagenes/logoPokemon.png">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     </head>
     <body>

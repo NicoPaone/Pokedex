@@ -1,4 +1,5 @@
 <?php
+
 $config = parse_ini_file("DB/config.ini", true); //Lee la config
 
 $db = $config['database']; //Saca los datos y los pasa a un array
@@ -33,8 +34,8 @@ function mostrarTablaPokemones($conexion, $busqueda = '')
     $result = obtenerPokemones($conexion, $busqueda);
 
     echo '<div class="table-responsive">';
-    echo '<table class="table table-striped table-bordered text-center align-middle">';
-    echo '<thead class="table-dark">';
+    echo '<table class="table table-hover table-bordered text-center align-middle">';
+    echo '<thead class="table-warning">';
     echo '<tr>';
     echo '<th>Imagen</th>';
     echo '<th>Tipo</th>';
@@ -61,7 +62,7 @@ function mostrarTablaPokemones($conexion, $busqueda = '')
 
             echo '<td>' . htmlspecialchars($row['numero_identificador']) . '</td>';
 
-            echo '<td>' . htmlspecialchars($row['nombre']) . '</td>';
+            echo '<td>' . '<a class="link-underline-dark link-dark" href="descripcionEspecifica.php?numero_identificador=' . $row['numero_identificador'] . '">' . htmlspecialchars($row['nombre']) . '</a>' . '</td>';
 
             if (isset($_SESSION['usuario'])) { //Solo lo muestra si esta la sesion iniciada
                 echo '<td>';
