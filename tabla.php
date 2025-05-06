@@ -76,6 +76,32 @@ function mostrarTablaPokemones($conexion, $busqueda = '')
     } else {
         $colspan = isset($_SESSION['usuario']) ? 5 : 4;
         echo '<tr><td colspan="' . $colspan . '" class="text-center">No se encontraron Pokémon</td></tr>';
+
+        $sinEncontrar = obtenerPokemones($conexion, $busqueda = '');
+        if ($sinEncontrar->num_rows > 0) {
+            while ($row = $sinEncontrar->fetch_assoc()) {
+                echo '<tr>';
+
+                $imagenPokemon = 'imagenes/pokemon/' . htmlspecialchars($row['imagen']);
+                echo '<td><img src="' . $imagenPokemon . '" alt="' . htmlspecialchars($row['nombre']) . '" width="100" height="100"></td>';
+
+                $imagenTipo = 'imagenes/tipo/' . htmlspecialchars($row['tipo']);
+                echo '<td><img src="' . $imagenTipo . '" alt="' . htmlspecialchars($row['tipo']) . '"></td>';
+
+                echo '<td>' . htmlspecialchars($row['numero_identificador']) . '</td>';
+
+                echo '<td>' . '<a class="link-underline-dark link-dark" href="descripcionEspecifica.php?numero_identificador=' . $row['numero_identificador'] . '">' . htmlspecialchars($row['nombre']) . '</a>' . '</td>';
+
+                if (isset($_SESSION['usuario'])) { //Solo lo muestra si esta la sesion iniciada
+                    echo '<td>';
+                    echo '<a href="editar.php?numero_identificador=' . $row['numero_identificador'] . '" class="btn btn-warning btn-sm me-1">Editar</a>';
+                    echo '<a href="eliminar.php?numero_identificador=' . $row['numero_identificador'] . '" class="btn btn-danger btn-sm">Eliminar</a>';
+                    echo '</td>';
+                }
+
+                echo '</tr>';
+            }
+        }
     }
 
     echo '</tbody>';
